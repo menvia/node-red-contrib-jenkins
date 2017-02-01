@@ -1,0 +1,19 @@
+{
+  "name": "node-red-contrib-jenkins",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felipe Plets <felipe@plets.me> (http://plets.me)",
+  "license": "ISC",
+  "dependencies": {
+    "jenkins": "^0.20.0"
+  },
+  "node-red" : {
+    "nodes": {
+      "jenkins-status": "status/status.js"
+    }
+  }
+}
