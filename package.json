@@ -11,9 +11,14 @@
   "dependencies": {
     "jenkins": "^0.20.0"
   },
-  "node-red" : {
+  "node-red": {
     "nodes": {
       "jenkins-status": "status/status.js"
     }
+  },
+  "devDependencies": {
+    "eslint": "^3.14.1",
+    "eslint-config-google": "^0.7.1",
+    "eslint-watch": "^2.1.14"
   }
 }
