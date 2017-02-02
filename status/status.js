@@ -16,7 +16,7 @@ module.exports = function(RED) {
             let jenkinsInstance = jenkins(jenkinsConfig);
             jenkinsInstance.info(function(err, data) {
                 if (err) throw err;
-                msg.payload = data;
+                msg.payload = data.jobs[0].color;
                 node.send(msg);
             });
         });

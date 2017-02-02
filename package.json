@@ -1,10 +1,15 @@
 {
-  "name": "node-red-contrib-jenkins",
-  "version": "0.0.1",
+  "name": "@menvia/node-red-contrib-jenkins",
+  "version": "0.0.3",
   "description": "",
+  "keywords": [
+    "node-red",
+    "jenkins"
+  ],
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "npm install",
+    "test": "mocha"
   },
   "author": "Felipe Plets <felipe@plets.me> (http://plets.me)",
   "license": "ISC",
@@ -17,8 +22,10 @@
     }
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^3.14.1",
     "eslint-config-google": "^0.7.1",
-    "eslint-watch": "^2.1.14"
+    "eslint-watch": "^2.1.14",
+    "mocha": "^3.2.0"
   }
 }
