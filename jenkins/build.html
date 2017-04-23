@@ -1,0 +1,63 @@
+
+<script type="text/javascript">
+    RED.nodes.registerType('jenkins-build',{
+        category: 'jenkins',
+        color: '#C7E9C0',
+        defaults: {
+            creds: { type: "jenkins-credentials", required: false },
+            url: { value: "" },
+            job: { value: "", validate: RED.validators.typedInput("jobType") },
+            jobType: { value: "" },
+            buildNumber: { value: "", validate: RED.validators.typedInput("buildNumberType") },
+            buildNumberType: { value: "" },
+        },
+        inputs:1,
+        outputs:1,
+        icon: "jenkins.png",
+        label: function() {
+            return "jenkins-build";
+        },
+        oneditprepare: function() {
+            var that = this;
+            if (!this.job) {
+                this.job = 'str';
+            }
+            $("#node-input-job").typedInput({
+                default: 'str',
+                types: ['str', 'msg','flow','global'],
+                typeField: $("#node-input-jobType")
+            });
+            $("#node-input-buildNumber").typedInput({
+                default: 'str',
+                types: ['str', 'msg','flow','global'],
+                typeField: $("#node-input-buildNumberType")
+            });
+        }
+
+    });
+</script>
+
+<script type="text/x-red" data-template-name="jenkins-build">
+    <div class="form-row">
+        <label for="node-input-creds"><i class="fa fa-key"></i> <span data-i18n="job.label.config.credentials"></span></label>
+        <input type="text" id="node-input-creds">
+    </div>
+    <div class="form-row">
+        <label for="node-input-url"><i class="icon-globe"></i> <span data-i18n="job.label.config.url"></span></label>
+        <input type="text" id="node-input-url" placeholder="URL">
+    </div>
+    <div class="form-row">
+        <label for="node-input-job"><i class="icon-cog"></i> <span data-i18n="job.label.config.job"></span></label>
+        <input type="text" id="node-input-job">
+        <input type="hidden" id="node-input-jobType">
+    </div>
+    <div class="form-row">
+        <label for="node-input-buildNumber"><i class="fa fa-hashtag"></i> <span data-i18n="job.label.config.buildNumber"></span></label>
+        <input type="text" id="node-input-buildNumber">
+        <input type="hidden" id="node-input-buildType">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="jenkins-build">
+    <p>Actions on Jenkins jobs</p>
+</script>

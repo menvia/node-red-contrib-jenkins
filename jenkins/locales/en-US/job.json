@@ -1,0 +1,12 @@
+{
+  "job": {
+    "label": {
+      "config": {
+        "credentials": "Jenkins ID",
+        "url": "URL",
+        "job": "Job",
+        "parameters": "Parameters"
+      }
+    }
+  }
+}
