@@ -14,11 +14,13 @@
   "author": "Felipe Plets <felipe@plets.me> (http://plets.me)",
   "license": "ISC",
   "dependencies": {
-    "jenkins": "^0.20.0"
+    "jenkins": "^0.20.0",
+    "urijs": "^1.18.10"
   },
   "node-red": {
     "nodes": {
-      "jenkins-status": "status/status.js"
+      "jenkins-status": "status/status.js",
+      "jenkins-credentials": "credentials/credentials.js"
     }
   },
   "devDependencies": {

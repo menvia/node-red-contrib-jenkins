@@ -1,13 +1,15 @@
+
 <script type="text/javascript">
     RED.nodes.registerType('jenkins-status',{
         category: 'jenkins',
         color: '#168BB9',
         defaults: {
-            url: {value:""}
+            creds: { type: "jenkins-credentials", required: false },
+            url: { value: "" }
         },
         inputs:1,
         outputs:1,
-        icon: "file.png",
+        icon: "jenkins.png",
         label: function() {
             return "jenkins-status";
         }
@@ -16,11 +18,15 @@
 
 <script type="text/x-red" data-template-name="jenkins-status">
     <div class="form-row">
-        <label for="node-input-url"><i class="icon-tag"></i> URL</label>
+        <label for="node-input-creds"><i class="fa fa-key"></i> <span data-i18n="status.label.config.credentials"></span></label>
+        <input type="text" id="node-input-creds">
+    </div>
+    <div class="form-row">
+        <label for="node-input-url"><i class="icon-tag"></i> <span data-i18n="status.label.config.url"></span></label>
         <input type="text" id="node-input-url" placeholder="URL">
     </div>
 </script>
 
 <script type="text/x-red" data-help-name="jenkins-status">
-    <p>A simple node that converts the message payloads into all lower-case characters</p>
+    <p>Get the status of a Jenkins server</p>
 </script>
