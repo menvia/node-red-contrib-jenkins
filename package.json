@@ -19,10 +19,10 @@
   },
   "node-red": {
     "nodes": {
-      "jenkins-credentials": "credentials/credentials.js",
-      "jenkins-status": "jenkins/status.js",
-      "jenkins-job": "jenkins/job.js",
-      "jenkins-build": "jenkins/build.js"
+      "jenkins-credentials": "nodes/credentials.js",
+      "jenkins-status": "nodes/status.js",
+      "jenkins-job": "nodes/job.js",
+      "jenkins-build": "nodes/build.js"
     }
   },
   "devDependencies": {
