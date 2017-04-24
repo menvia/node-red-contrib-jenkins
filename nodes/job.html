@@ -4,8 +4,7 @@
         category: 'jenkins',
         color: '#C0DEED',
         defaults: {
-            creds: { type: "jenkins-credentials", required: false },
-            url: { value: "" },
+            server: { type: "jenkins-server", required: false },
             job: { value: "" },
             jobType: { value: "" },
             parameters: { value: "" }
@@ -32,12 +31,8 @@
 
 <script type="text/x-red" data-template-name="jenkins-job">
     <div class="form-row">
-        <label for="node-input-creds"><i class="fa fa-key"></i> <span data-i18n="job.label.config.credentials"></span></label>
-        <input type="text" id="node-input-creds">
-    </div>
-    <div class="form-row">
-        <label for="node-input-url"><i class="icon-globe"></i> <span data-i18n="job.label.config.url"></span></label>
-        <input type="text" id="node-input-url" placeholder="URL">
+        <label for="node-input-server"><i class="fa fa-key"></i> <span data-i18n="job.label.config.server"></span></label>
+        <input type="text" id="node-input-server">
     </div>
     <div class="form-row">
         <label for="node-input-job"><i class="icon-cog"></i> <span data-i18n="job.label.config.job"></span></label>

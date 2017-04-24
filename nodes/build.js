@@ -1,6 +1,3 @@
-URI = require('urijs');
-util = require('util');
-
 module.exports = function(RED) {
     "use strict";
 
@@ -11,8 +8,7 @@ module.exports = function(RED) {
     function build(config) {
         RED.nodes.createNode(this, config);
 
-        this.creds = config.creds
-        this.url = config.url;
+        this.server = config.server
 
         this.job = config.job;
         this.jobType = config.jobType;
@@ -22,21 +18,7 @@ module.exports = function(RED) {
         let node = this;
 
         this.on('input', function(msg) {
-            let jenkins = require('jenkins');
-            let jenkinsInstance = null
-
-            {
-                let url = new URI(node.url)
-                  .username(RED.nodes.getNode(node.creds).credentials.username)
-                  .password(RED.nodes.getNode(node.creds).credentials.password);
-
-                let jenkinsConfig = {
-                    baseUrl: url.toString(),
-                    crumbIssuer: true,
-                };
-
-                jenkinsInstance = jenkins(jenkinsConfig);
-            }
+            let jenkins_server = RED.nodes.getNode(node.server);
 
             function getValue(type, value) {
                 if (type === 'msg') {
@@ -52,8 +34,7 @@ module.exports = function(RED) {
             let job = getValue(node.jobType, node.job)
             let buildNumber = getValue(node.buildNumberType, node.buildNumber)
 
-            this.log("Getting build info " + job + " " + buildNumber)
-            jenkinsInstance.build.get(job, buildNumber, function(err, data) {
+            jenkins_server.api.build.get(job, buildNumber, function(err, data) {
                 if (err) {
                     node.status({ 
                                   fill: "red",

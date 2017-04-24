@@ -19,7 +19,7 @@
   },
   "node-red": {
     "nodes": {
-      "jenkins-credentials": "nodes/credentials.js",
+      "jenkins-credentials": "nodes/config-server.js",
       "jenkins-status": "nodes/status.js",
       "jenkins-job": "nodes/job.js",
       "jenkins-build": "nodes/build.js"
