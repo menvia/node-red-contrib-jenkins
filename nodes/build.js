@@ -10,6 +10,8 @@ module.exports = function(RED) {
 
         this.server = config.server
 
+        this.action = config.action;
+        this.mode = config.mode;
         this.job = config.job;
         this.jobType = config.jobType;
         this.buildNumber = config.buildNumber;
@@ -20,26 +22,76 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
             let jenkins_server = RED.nodes.getNode(node.server);
 
-            let job = RED.util.evaluateNodeProperty(node.job, node.jobType, node, msg);
-            let buildNumber = RED.util.evaluateNodeProperty(node.buildNumber, node.buildNumberType, node, msg)
+            if (msg.jenkins == undefined) msg.jenkins = {}
 
-            jenkins_server.api.build.get(job, buildNumber, function(err, data) {
-                if (err) {
-                    node.status({ 
-                                  fill: "red",
-                                  shape: "dot",
-                                  text: "Error getting build info" 
-                                });
-                    node.error("Error getting build info for " + this.job + " " + buildNumber, err);
-                    return
-                }
-                
-                if (msg.payload.jenkins == undefined) msg.payload.jenkins = {}
-                msg.payload.jenkins.build = data;
+            let job = findJob(node, msg);
+            let buildNumber = findBuildNumber(node, msg);
 
-                node.send(msg);
-            });
+            if(node.action == "get") {
+                jenkins_server.api.build.get(job, buildNumber, function(err, data) {
+                    if(!processError(node, err)) return;
+                    
+                    msg.jenkins.build = data;
+                    node.send(msg);
+                });
+            }
+            else if (node.action == "log") {
+                jenkins_server.api.build.log(job, buildNumber, function(err, data) {
+                    if(!processError(node, err)) return;
+
+                    msg.jenkins.build_log = data;
+                    node.send(msg);
+                });
+            }
+            else if (node.action == "stop") {
+                jenkins_server.api.build.stop(job, buildNumber, function(err, data) {
+                    if(!processError(node, err)) return;
+                    msg.jenkins.build_stop = data;
+                    node.send(msg);
+                });
+            }
         });
     }
     RED.nodes.registerType('jenkins-build', build);
+
+    function processError(node, err) {
+        if (err) {
+            node.status({
+                        fill: "red",
+                        shape: "dot",
+                        text: "Error getting build info"
+                        });
+            node.error("Error getting build info for " + this.job + " " + buildNumber, err);
+            return false;
+        }
+        else {
+            // Clear the error status
+            node.status({});
+        }
+        return true;
+    }
+
+    function findJob(node, msg) {
+        if(node.mode == "automatic") {
+            return msg.jenkins.job.name;
+        }
+        else if (node.mode == "manual") {
+            return RED.util.evaluateNodeProperty(node.job, node.jobType, node, msg);
+        }
+        else {
+            node.error("Unknown mode " + node.mode);
+        }
+    }
+
+    function findBuildNumber(node, msg) {
+        if(node.mode == "automatic") {
+            return msg.jenkins.build.number;
+        }
+        else if (node.mode == "manual") {
+            return RED.util.evaluateNodeProperty(node.buildNumber, node.buildNumberType, node, msg)
+        }
+        else {
+            node.error("Unknown mode " + node.mode);
+        }
+    }
 };
