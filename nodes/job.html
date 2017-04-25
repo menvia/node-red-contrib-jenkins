@@ -53,9 +53,12 @@
             $("#node-input-action").change(function(){
                 var so = $("#node-input-action option:selected").val();
                 hideExtraActions();
-                if(so == "build" || so == "get"){
+                if(so == "build") {
                     $("#node-action-job").show();
                     $("#node-action-parameters").show();
+                }
+                else if(so == "get") {
+                    $("#node-action-job").show();
                 }
             });
 
@@ -99,7 +102,7 @@
         <input type="text" id="node-input-job">
         <input type="hidden" id="node-input-jobType">
    </div>
-    <div class="form-row node-input-parameters-row" style="margin-bottom: 0px;width: 100%">
+    <div class="form-row node-input-parameters-row" style="margin-bottom: 0px;width: 100%" id="node-action-parameters">
         <label for="node-input-parameters-div" style="vertical-align:top"><i class="fa fa-list-alt"></i> Parameters</label>
         <ol id="node-input-parameters-container" style=" list-style-type:none; margin: 0;"></ol>
     </div>
