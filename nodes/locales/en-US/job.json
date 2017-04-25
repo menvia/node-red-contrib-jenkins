@@ -1,0 +1,18 @@
+{
+  "job": {
+    "label": {
+      "config": {
+        "server": "Jenkins server",
+        "url": "URL",
+        "job": "Job",
+        "parameters": "Parameters",
+        "action": "Action"
+      },
+      "action":  {
+        "list": "List jobs",
+        "get": "Get job details",
+        "build": "Build job"
+      }
+    }
+  }
+}

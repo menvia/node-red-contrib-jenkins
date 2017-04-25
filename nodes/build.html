@@ -1,0 +1,104 @@
+
+<script type="text/javascript">
+    RED.nodes.registerType('jenkins-build',{
+        category: 'jenkins',
+        color: '#C7E9C0',
+        defaults: {
+            server: { type: "jenkins-server", required: false },
+            action: { value: "get" },
+            mode: { value: "automatic" },
+            job: { value: "", validate: RED.validators.typedInput("jobType") },
+            jobType: { value: "" },
+            buildNumber: { value: "", validate: RED.validators.typedInput("buildNumberType") },
+            buildNumberType: { value: "" },
+        },
+        inputs:1,
+        outputs:1,
+        icon: "jenkins.png",
+        label: function() {
+            return "jenkins-build";
+        },
+        oneditprepare: function() {
+            var that = this;
+
+            // Job and build typed inputs
+            $("#node-input-job").typedInput({
+                default: 'str',
+                types: ['str', 'msg','flow','global'],
+                typeField: $("#node-input-jobType")
+            });
+            $("#node-input-buildNumber").typedInput({
+                default: 'str',
+                types: ['str', 'msg','flow','global'],
+                typeField: $("#node-input-buildNumberType")
+            });
+
+            $("#node-input-mode").change(function(){
+                var so = $("#node-input-mode option:selected").val();
+                hideExtraActions();
+                if(so == "manual"){
+                    $("#node-action-custom-job").show();
+                }
+            });
+
+            function hideExtraActions(){
+                $("#node-action-custom-job").hide();
+            }
+        }
+
+    });
+</script>
+
+<script type="text/x-red" data-template-name="jenkins-build">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-key"></i> <span data-i18n="job.label.config.server"></span></label>
+        <input type="text" id="node-input-server">
+    </div>
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-wrench"></i> <span data-i18n="job.label.config.action"></span></label>
+        <select type="text" id="node-input-action" style="display: inline-block; width: 250px; vertical-align: top;">
+            <option value="get" outputs="1" data-i18n="job.label.action.get"/>
+            <option value="log" outputs="1" data-i18n="job.label.action.logs"/>
+            <option value="stop" outputs="1" data-i18n="job.label.action.stop"/>
+        </select>
+   </div>
+   <div class="form-row">
+        <label for="node-input-mode"><i class="fa fa-search"></i> <span data-i18n="job.label.config.mode"></span></label>
+        <select type="text" id="node-input-mode" style="display: inline-block; width: 250px; vertical-align: top;">
+            <option value="automatic" outputs="1" data-i18n="job.label.mode.automatic"/>
+            <option value="manual" outputs="1" data-i18n="job.label.mode.manual"/>
+        </select>
+   </div>
+   <div class="form-row" id="node-action-custom-job">
+        <div class="form-row" id="node-action-job">
+            <label for="node-input-job"><i class="icon-cog"></i> <span data-i18n="job.label.config.job"></span></label>
+            <input type="text" id="node-input-job">
+            <input type="hidden" id="node-input-jobType">
+        </div>
+        <div class="form-row" id="node-action-buildNumber">
+            <label for="node-input-buildNumber"><i class="fa fa-hashtag"></i> <span data-i18n="job.label.config.buildNumber"></span></label>
+            <input type="text" id="node-input-buildNumber">
+            <input type="hidden" id="node-input-buildType">
+        </div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="jenkins-build">
+    <p>Actions on Jenkins builds</p>
+    <p>When paired with the <b>jenkins-job</b> node, it will automatically find the jenkins build to use.</p>
+    <p>Otherwise the build can be identified by a job name and a build number, provided as string, or from the <code>msg</code>, <code>flow</code> or <code>global</code> variables
+    <p> The following actions can be performed on a build:
+        <ul>
+            <li><b>Get build details</b>: Get all the information about a specific build
+            <li><b>Get build log</b>: Get the build log for a specific build
+            <li><b>Stop build</b>: Stops a build. This has no action if the build is not running.
+        </ul>
+    </p>
+    <p>
+        The following elemts will be added to <code>msg</code>:
+        <ul>
+            <li><b>msg.jenkins.build</b>: When run with the build option. This will contain informations about the build
+            <li><b>msg.jenkins.build_lof</b>: When run with the log option. This will contain a string with the full build log
+        </ul>
+    </p>
+</script>

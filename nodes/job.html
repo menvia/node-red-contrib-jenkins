@@ -1,0 +1,122 @@
+
+<script type="text/javascript">
+    RED.nodes.registerType('jenkins-job',{
+        category: 'jenkins',
+        color: '#C0DEED',
+        defaults: {
+            server: { type: "jenkins-server", required: false },
+            action: { value: "list" },
+            job: { value: "" },
+            jobType: { value: "" },
+            parameters: { value: [] },
+        },
+        inputs:1,
+        outputs:1,
+        icon: "jenkins.png",
+        label: function() {
+            return "jenkins-job";
+        },
+        oneditprepare: function() {
+            var node = this;
+
+            // Job typed input
+            if (!this.job) {
+                this.job = 'str';
+            }
+            $("#node-input-job").typedInput({
+                default: 'str',
+                types: ['str', 'msg','flow','global'],
+                typeField: $("#node-input-jobType")
+            });
+
+            // List for parameters
+            var parameterList = $("#node-input-parameters-container").css('min-height','250px').css('min-width','450px').editableList({
+                addButton: "add",
+                removable: true,
+                addItem: function(row, index, data) {
+                    console.log("Adding item " + data.label);
+                    var labelField = $('<input/>',{class:"node-input-parameter-label",type:"text",style:"margin-left: 7px; width: 135px;", placeholder: 'Parameter', value: data.label});
+                    var valueField = $('<input/>',{class:"node-input-parameter-value",type:"text",style:"margin-left: 7px; width: 135px;", placeholder: 'Value', value: data.value});
+
+                    labelField.appendTo(row);
+                    valueField.appendTo(row);
+                }
+            });
+
+            // Load parameters into the list
+            for (var i = 0; i < node.parameters.length; i++) {
+                var parameter = node.parameters[i];
+                $("#node-input-parameters-container").editableList('addItem', parameter);
+            }
+
+            // Action options
+            $("#node-input-action").change(function(){
+                var so = $("#node-input-action option:selected").val();
+                hideExtraActions();
+                if(so == "build") {
+                    $("#node-action-job").show();
+                    $("#node-action-parameters").show();
+                }
+                else if(so == "get") {
+                    $("#node-action-job").show();
+                }
+            });
+
+            function hideExtraActions(){
+                $("#node-action-job").hide();
+                $("#node-action-parameters").hide();
+            }
+        },
+        oneditsave: function() {
+            var parameters = $("#node-input-parameters-container").children();
+            var node = this;
+            node.parameters = [];
+            parameters.each(function(i) {
+                var parameter = $(this);
+                var o = {
+                    label: parameter.find(".node-input-parameter-label").val(),
+                    value: parameter.find(".node-input-parameter-value").val(),
+                };
+
+                node.parameters.push(o);
+            });
+        },
+    });
+</script>
+
+<script type="text/x-red" data-template-name="jenkins-job">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-key"></i> <span data-i18n="job.label.config.server"></span></label>
+        <input type="text" id="node-input-server">
+    </div>
+    <div class="form-row">
+        <label for="node-input-action"><i class="fa fa-wrench"></i> <span data-i18n="job.label.config.action"></span></label>
+        <select type="text" id="node-input-action" style="display: inline-block; width: 250px; vertical-align: top;">
+            <option value="list" outputs="1" data-i18n="job.label.action.list"/>
+            <option value="get" outputs="1" data-i18n="job.label.action.get"/>
+            <option value="build" outputs="1" data-i18n="job.label.action.build"/>
+        </select>
+   </div>
+    <div class="form-row" id="node-action-job">
+        <label for="node-input-job"><i class="icon-cog"></i> <span data-i18n="job.label.config.job"></span></label>
+        <input type="text" id="node-input-job">
+        <input type="hidden" id="node-input-jobType">
+   </div>
+    <div class="form-row node-input-parameters-row" style="margin-bottom: 0px;width: 100%" id="node-action-parameters">
+        <label for="node-input-parameters-div" style="vertical-align:top"><i class="fa fa-list-alt"></i> Parameters</label>
+        <ol id="node-input-parameters-container" style=" list-style-type:none; margin: 0;"></ol>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="jenkins-job">
+    <p>Actions on Jenkins jobs</p>
+    <p>
+        The following actions can be performed:
+        <ul> 
+            <li> <b>List all jobs</b>: <code>msg.payload.jobs</code> will contain the list of the job objects</li>
+            <li> <b>Build a job</b>:<p> <code>msg.payload.jenkins.job.name</code> will contain the job name</p>
+                                    <p> <code>msg.payload.jenkins.build.number</code> will contain the build number</p>
+            </li>
+        </ul>
+    </p>
+</script>

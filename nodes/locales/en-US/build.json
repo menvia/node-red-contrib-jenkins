@@ -1,0 +1,23 @@
+{
+  "job": {
+    "label": {
+      "config": {
+        "server": "Jenkins server",
+        "action": "Action",
+        "url": "URL",
+        "job": "Job",
+        "mode": "Mode",
+        "buildNumber": "Build number"
+      },
+      "mode": {
+        "automatic": "Automatic",
+        "manual": "Manual"
+      },
+      "action": {
+        "get": "Get details",
+        "logs": "Get logs",
+        "stop": "Stop"
+      }
+    }
+  }
+}
