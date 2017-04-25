@@ -17,18 +17,7 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
             let jenkins_server = RED.nodes.getNode(node.server);
 
-            function getValue(type, value) {
-                if (type === 'msg') {
-                    return RED.util.getMessageProperty(msg, value);
-                } else if (type === 'flow') {
-                    return node.context().flow.get(value);
-                } else if (type === 'global') {
-                    return node.context().global.get(value);
-                }
-                return value;
-            }
-
-            let job = getValue(node.jobType, node.job)
+            let job = RED.util.evaluateNodeProperty(node.job, node.jobType, node, msg);
             jenkins_server.api.job.build({name: job, parameters: this.parameters}, function(err, data) {
                 if (err) {
                     node.status({ 
