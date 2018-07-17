@@ -1,5 +1,5 @@
 module.exports = function(RED) {
-    "use strict";
+    'use strict';
 
     /**
      * Build a job
@@ -8,7 +8,7 @@ module.exports = function(RED) {
     function build(config) {
         RED.nodes.createNode(this, config);
 
-        this.server = config.server
+        this.server = config.server;
 
         this.action = config.action;
         this.mode = config.mode;
@@ -22,28 +22,26 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
             let jenkins_server = RED.nodes.getNode(node.server);
 
-            if (msg.jenkins == undefined) msg.jenkins = {}
+            if (msg.jenkins == undefined) msg.jenkins = {};
 
             let job = findJob(node, msg);
             let buildNumber = findBuildNumber(node, msg);
 
-            if(node.action == "get") {
+            if(node.action == 'get') {
                 jenkins_server.api.build.get(job, buildNumber, function(err, data) {
                     if(!processError(node, err)) return;
-                    
+
                     msg.jenkins.build = data;
                     node.send(msg);
                 });
-            }
-            else if (node.action == "log") {
+            } else if (node.action == 'log') {
                 jenkins_server.api.build.log(job, buildNumber, function(err, data) {
                     if(!processError(node, err)) return;
 
                     msg.jenkins.build_log = data;
                     node.send(msg);
                 });
-            }
-            else if (node.action == "stop") {
+            } else if (node.action == 'stop') {
                 jenkins_server.api.build.stop(job, buildNumber, function(err, data) {
                     if(!processError(node, err)) return;
                     msg.jenkins.build_stop = data;
@@ -57,14 +55,13 @@ module.exports = function(RED) {
     function processError(node, err) {
         if (err) {
             node.status({
-                        fill: "red",
-                        shape: "dot",
-                        text: "Error getting build info"
+                        fill: 'red',
+                        shape: 'dot',
+                        text: 'Error getting build info',
                         });
-            node.error("Error getting build info for " + this.job + " " + buildNumber, err);
+            node.error('Error getting build info for ' + this.job + ' ' + buildNumber, err);
             return false;
-        }
-        else {
+        } else {
             // Clear the error status
             node.status({});
         }
@@ -72,26 +69,22 @@ module.exports = function(RED) {
     }
 
     function findJob(node, msg) {
-        if(node.mode == "automatic") {
+        if(node.mode == 'automatic') {
             return msg.jenkins.job.name;
-        }
-        else if (node.mode == "manual") {
+        } else if (node.mode == 'manual') {
             return RED.util.evaluateNodeProperty(node.job, node.jobType, node, msg);
-        }
-        else {
-            node.error("Unknown mode " + node.mode);
+        } else {
+            node.error('Unknown mode ' + node.mode);
         }
     }
 
     function findBuildNumber(node, msg) {
-        if(node.mode == "automatic") {
+        if(node.mode == 'automatic') {
             return msg.jenkins.build.number;
-        }
-        else if (node.mode == "manual") {
-            return RED.util.evaluateNodeProperty(node.buildNumber, node.buildNumberType, node, msg)
-        }
-        else {
-            node.error("Unknown mode " + node.mode);
+        } else if (node.mode == 'manual') {
+            return RED.util.evaluateNodeProperty(node.buildNumber, node.buildNumberType, node, msg);
+        } else {
+            node.error('Unknown mode ' + node.mode);
         }
     }
 };

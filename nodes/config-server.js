@@ -1,10 +1,10 @@
 URI = require('urijs');
 
 module.exports = function(RED) {
-    "use strict";
+    'use strict';
 
     function JenkinsServer(n) {
-      RED.nodes.createNode(this,n);
+      RED.nodes.createNode(this, n);
       this.name = n.name;
       this.url = n.url;
 
@@ -21,11 +21,11 @@ module.exports = function(RED) {
 
       this.api = jenkins(jenkinsConfig);
     }
-    
-    RED.nodes.registerType("jenkins-server",JenkinsServer,{
+
+    RED.nodes.registerType('jenkins-server', JenkinsServer, {
       credentials: {
-        username:  { type: "text" },
-        password: { type: "password" },
-      }
+        username: {type: 'text'},
+        password: {type: 'password'},
+      },
     });
-}
+};

@@ -2,7 +2,7 @@ URI = require('urijs');
 util = require('util');
 
 module.exports = function(RED) {
-    "use strict";
+    'use strict';
 
     /**
      * Get status from a Jenkins instance
@@ -11,13 +11,13 @@ module.exports = function(RED) {
     function getStatus(config) {
         RED.nodes.createNode(this, config);
 
-        this.creds = config.creds
+        this.creds = config.creds;
         this.url = config.url;
 
         let node = this;
         this.on('input', function(msg) {
             let jenkins = require('jenkins');
-            let jenkinsInstance = null
+            let jenkinsInstance = null;
 
             {
                 let url = new URI(node.url)
@@ -33,7 +33,7 @@ module.exports = function(RED) {
             }
 
             jenkinsInstance.info(function(err, data) {
-                if (err) return node.error("Error getting info from Jenkins", err);
+                if (err) return node.error('Error getting info from Jenkins', err);
                 msg.payload = data.jobs[0].color;
 
                 node.send(msg);

@@ -1,6 +1,6 @@
 {
   "name": "@menvia/node-red-contrib-jenkins",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "",
   "keywords": [
     "node-red",
@@ -14,8 +14,8 @@
   "author": "Felipe Plets <felipe@plets.me> (http://plets.me)",
   "license": "ISC",
   "dependencies": {
-    "jenkins": "^0.20.0",
-    "urijs": "^1.18.10"
+    "jenkins": "^0.22.1",
+    "urijs": "^1.19.1"
   },
   "node-red": {
     "nodes": {
@@ -26,10 +26,10 @@
     }
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.14.1",
-    "eslint-config-google": "^0.7.1",
-    "eslint-watch": "^2.1.14",
-    "mocha": "^3.2.0"
+    "chai": "^4.1.2",
+    "eslint": "^5.1.0",
+    "eslint-config-google": "^0.9.1",
+    "eslint-watch": "^4.0.1",
+    "mocha": "^5.2.0"
   }
 }
