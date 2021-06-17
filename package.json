@@ -14,7 +14,7 @@
   "author": "Felipe Plets <felipe@plets.me> (http://plets.me)",
   "license": "ISC",
   "dependencies": {
-    "jenkins": "^0.22.1",
+    "jenkins": "^0.28.1",
     "urijs": "^1.19.1"
   },
   "node-red": {
